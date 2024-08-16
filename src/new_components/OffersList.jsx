@@ -12,7 +12,8 @@ import {
 } from "../database/supabase";
 import DeadlineOffer from "./DeadlineOffer";
 
-const contractAddress = "0x17025682f2AE05a1aC537b6253E7581F27a93E99";
+// const contractAddress = "0x17025682f2AE05a1aC537b6253E7581F27a93E99"; sepolia
+const contractAddress = import.meta.VITE_CONTRACT_ADDRESS; // mainnet
 
 const contractABI = [
   {
