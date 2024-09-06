@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../database/supabase";
+import {
+  supabase,
+} from "../database/supabase";
 import { playmakersLogo } from "../assets";
 
 const Login = ({ onLoginSuccess }) => {
@@ -15,18 +17,31 @@ const Login = ({ onLoginSuccess }) => {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     setLoading(false);
-
     if (error) {
       setError("Invalid login credentials.");
-    } else {
-      onLoginSuccess(); 
-      navigate("/adminonly"); 
+      return;
+    }
+
+    /* Check the user metadata to verify if the role is admin */
+    if (user) {
+      const role = user.user_metadata?.role;
+
+      if (role !== "admin") {
+        setError("Access denied: You do not have admin privileges.");
+        return;
+      }
+
+      onLoginSuccess();
+      navigate("/adminonly");
     }
   };
 
