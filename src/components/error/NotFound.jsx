@@ -1,8 +1,8 @@
-import {  playmakersLogo } from "../../assets";
+import { playmakersLogo } from "../../assets";
 
 const NotFound = () => {
   return (
-    <section className="h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] dark:bg-gray-900 py-20">
+    <section className="h-screen w-screen bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(92,27,51,0.3),rgba(92,27,51))] dark:bg-gray-900 py-20">
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center">
           <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-[180px] text-[#B3B3B3] flex justify-center gap-5">

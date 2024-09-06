@@ -5,47 +5,91 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFound from "./components/error/NotFound.jsx";
 import Login from "./authentication/Login.jsx";
-import PlaymakersAdmin from "./routes/PlaymakersAdmin.jsx";
+import Dashboard from "./routes/Dashboard.jsx";
+import EventManagement from "./routes/EventManagement.jsx";
+import MemberOrganization from "./routes/MemberOrganization.jsx";
+import EventStatistics from "./routes/EventStatistics.jsx";
 
 const Main = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(true); 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-      const savedAuthState = localStorage.getItem("isAuthenticated");
-      if (savedAuthState === "true") {
-        setIsAuthenticated(true);
-      }
-      setLoading(false); 
-    }, []);
-
-    const handleLoginSuccess = () => {
+  useEffect(() => {
+    const savedAuthState = localStorage.getItem("isAuthenticated");
+    if (savedAuthState === "true") {
       setIsAuthenticated(true);
-      localStorage.setItem("isAuthenticated", "true");
-    };
-
-    if (loading) {
-      return <div>Loading...</div>; 
     }
+    setLoading(false);
+  }, []);
 
-    const router = createBrowserRouter([
-      {
-        path: `/`,
-        element: <App />,
-        errorElement: <NotFound />,
-      },
-      {
-        path: `/adminonly`,
-        element: isAuthenticated ? (
-          <PlaymakersAdmin />
-        ) : (
-          <Login onLoginSuccess={handleLoginSuccess} />
-        ),
-        errorElement: <NotFound />,
-      },
-    ]);
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem("isAuthenticated", "true");
+  };
 
-    return <RouterProvider router={router} />;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="loader">Loading...</div>
+      </div>
+    );
+  }
+
+  const router = createBrowserRouter([
+    {
+      path: `/`,
+      element: <App />,
+      errorElement: <NotFound />,
+    },
+    {
+      path: `/dashboard`,
+      element: isAuthenticated ? (
+        <Dashboard />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      ),
+      errorElement: <NotFound />,
+    },
+    {
+      path: `/events-management`,
+      element: isAuthenticated ? (
+        <EventManagement />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      ),
+      errorElement: <NotFound />,
+    },
+    {
+      path: `/member-organization`,
+      element: isAuthenticated ? (
+        <MemberOrganization />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      ),
+      errorElement: <NotFound />,
+    },
+    {
+      path: `/event-statistics`,
+      element: isAuthenticated ? (
+        <EventStatistics />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      ),
+      errorElement: <NotFound />,
+    },
+
+    {
+      path: `/adminonly`,
+      element: isAuthenticated ? (
+        <Dashboard />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      ),
+      errorElement: <NotFound />,
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 };
 
 ReactDOM.createRoot(document.getElementById("root")).render(

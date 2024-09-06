@@ -32,6 +32,7 @@ const Login = ({ onLoginSuccess }) => {
     }
 
     /* Check the user metadata to verify if the role is admin */
+    
     if (user) {
       const role = user.user_metadata?.role;
 
@@ -41,7 +42,7 @@ const Login = ({ onLoginSuccess }) => {
       }
 
       onLoginSuccess();
-      navigate("/adminonly");
+      navigate("/dashboard");
     }
   };
 
@@ -49,6 +50,7 @@ const Login = ({ onLoginSuccess }) => {
     <div className="flex items-center justify-center min-h-screen bg-[#5C1B33]">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-md flex">
         {/* Left Side Login Form */}
+        
         <div className="w-1/2 p-8">
           <h2 className="text-2xl font-bold text-[#5C1B33]">Administrator</h2>
           <p className="mt-2 text-red-400/60 text-xs font-medium">
