@@ -1,75 +1,144 @@
 import { useState } from "react";
-import { supabase } from "../database/supabase";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { supabase } from "../database/supabase";
+import { playmakersLogo } from "../assets";
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
+    setLoading(true);
+    setError("");
+
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
+    setLoading(false);
+
     if (error) {
-      toast.error("Login failed. Please check your credentials.");
-      console.log(error);
+      setError("Invalid login credentials.");
     } else {
-      toast.success("Login successful!");
-      onLoginSuccess();
-      navigate("/mayamangpobre");
+      onLoginSuccess(); 
+      navigate("/adminonly"); 
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <div className="p-8 bg-[#1B1B1B] text-yellow-400 max-w-md mx-auto rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-300 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-200"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div className="flex items-center justify-center min-h-screen bg-[#5C1B33]">
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md flex">
+        {/* Left Side Login Form */}
+        <div className="w-1/2 p-8">
+          <h2 className="text-2xl font-bold text-[#5C1B33]">Administrator</h2>
+          <p className="mt-2 text-red-400/60 text-xs font-medium">
+            If you are not an administrator, please navigate away from this page
+            immediately
+          </p>
+          <form className="mt-8 space-y-4" onSubmit={handleLogin}>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <div className="mt-1">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                />
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-900"
+                >
+                  Remember me
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Right Side */}
+        <div className="w-1/2 bg-gradient-to-r from-[#FBEBF1] to-[#FBEBF1] p-8 rounded-r-lg flex flex-col justify-center items-center">
+          <img src={playmakersLogo} alt="Playmakers Logo" width="80" />
+          <h3 className="text-xl font-bold text-[#5C1B33] mb-4">Playmakers</h3>
+          <p className="text-gray-600 mb-4">Only playmakers officials</p>
+          <div className="flex space-x-4">
+            <div className="bg-yellow-100 p-2 rounded-full">
+              <span role="img" aria-label="guitar">
+                🎸
+              </span>
+            </div>
+            <div className="bg-red-100 p-2 rounded-full">
+              <span role="img" aria-label="microphone">
+                🎤
+              </span>
+            </div>
+            <div className="bg-blue-100 p-2 rounded-full">
+              <span role="img" aria-label="musical note">
+                🎵
+              </span>
+            </div>
+            <div className="bg-green-100 p-2 rounded-full">
+              <span role="img" aria-label="piano">
+                🎹
+              </span>
+            </div>
           </div>
-          <div className="mb-6">
-            <label
-              className="block text-gray-300 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full p-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-200"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full p-3 bg-yellow-500 text-gray-900 font-bold rounded hover:bg-yellow-600 transition"
-          >
-            Login
-          </button>
-        </form>
-        <Toaster />
+        </div>
       </div>
     </div>
   );
