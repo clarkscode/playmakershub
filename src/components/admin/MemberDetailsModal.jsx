@@ -48,8 +48,13 @@ const MemberDetailsModal = ({ member, onClose }) => {
           </p>
 
           <div className="flex items-center mt-6">
-            <img
+            {/* <img
               className="w-20 h-20 rounded-full object-cover border-2 border-white"
+              src={member.image}
+              alt={member.name}
+            /> */}
+            <img
+              className="w-20 h-20 rounded-full object-cover "
               src={member.image}
               alt={member.name}
             />

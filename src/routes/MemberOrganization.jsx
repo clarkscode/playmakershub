@@ -5,6 +5,7 @@ import { Sidebar } from "../components/admin/SideBar";
 import Modal from "../components/admin/Reusable/Modal";
 import MemberForm from "../components/admin/Reusable/MemberForm";
 import MemberDetailsModal from "../components/admin/MemberDetailsModal";
+import { playmakersLogo } from "../assets";
 
 const membersData = [
   {
@@ -16,8 +17,7 @@ const membersData = [
     events: 32,
     joinDate: "June 06, 2024, 5:00 pm",
     status: "active",
-    image:
-      "https://www.wilsoncenter.org/sites/default/files/media/images/person/james-person-1.jpg",
+    image: playmakersLogo,
   },
   {
     name: "Prince Edward Zacarias",
@@ -28,20 +28,18 @@ const membersData = [
     events: 32,
     joinDate: "July 13, 2020",
     status: "inactive",
-    image:
-      "https://www.wilsoncenter.org/sites/default/files/media/images/person/james-person-1.jpg",
+    image: playmakersLogo,
   },
   {
-    name: "Prince Edward Zacarias",
-    email: "jieclark@ustp.edu.ph",
+    name: "James Heinrich Rocales",
+    email: "rocales.jamesheinrich@ustp.edu.ph",
     role: ["Percussionist", "Keyboardist"],
     genre: ["Rock", "Jazz"],
     mobile: "0916513814",
     events: 32,
     joinDate: "July 13, 2020",
     status: "warning",
-    image:
-      "https://www.wilsoncenter.org/sites/default/files/media/images/person/james-person-1.jpg",
+    image: playmakersLogo,
   },
 ];
 
