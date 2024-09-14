@@ -11,6 +11,8 @@ import Dashboard from "./routes/Dashboard.jsx";
 import EventManagement from "./routes/EventManagement.jsx";
 import MemberOrganization from "./routes/MemberOrganization.jsx";
 import EventStatistics from "./routes/EventStatistics.jsx";
+import Profile from "./components/admin/Profile.jsx";
+import Notification from "./components/admin/Notification.jsx";
 
 const Main = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,6 +39,15 @@ const Main = () => {
     );
   }
 
+  // Reusable function for authenticated routes
+  const authRoute = (Component) => {
+    return isAuthenticated ? (
+      <Component />
+    ) : (
+      <Login onLoginSuccess={handleLoginSuccess} />
+    );
+  };
+
   const router = createBrowserRouter([
     {
       path: `/`,
@@ -61,48 +72,37 @@ const Main = () => {
 
     {
       path: `/dashboard`,
-      element: isAuthenticated ? (
-        <Dashboard />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      ),
+      element: authRoute(Dashboard),
       errorElement: <NotFound />,
     },
     {
       path: `/events-management`,
-      element: isAuthenticated ? (
-        <EventManagement />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      ),
+      element: authRoute(EventManagement),
       errorElement: <NotFound />,
     },
     {
       path: `/member-organization`,
-      element: isAuthenticated ? (
-        <MemberOrganization />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      ),
+      element: authRoute(MemberOrganization),
       errorElement: <NotFound />,
     },
     {
       path: `/event-statistics`,
-      element: isAuthenticated ? (
-        <EventStatistics />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      ),
+      element: authRoute(EventStatistics),
       errorElement: <NotFound />,
     },
-
+    {
+      path: `/profile`,
+      element: authRoute(Profile),
+      errorElement: <NotFound />,
+    },
+    {
+      path: `/notification`,
+      element: authRoute(Notification),
+      errorElement: <NotFound />,
+    },
     {
       path: `/adminonly`,
-      element: isAuthenticated ? (
-        <Dashboard />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      ),
+      element: authRoute(Dashboard),
       errorElement: <NotFound />,
     },
   ]);

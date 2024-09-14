@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Header } from "../components/admin/Header";
 import MemberCard from "../components/admin/MemberCard";
-import { Sidebar } from "../components/admin/SideBar";
 import Modal from "../components/admin/Reusable/Modal";
 import MemberForm from "../components/admin/Reusable/MemberForm";
 import MemberDetailsModal from "../components/admin/MemberDetailsModal";
 import { playmakersLogo } from "../assets";
+import Sidebar from "../components/admin/Sidebar";
+import Header from "../components/admin/Header";
 
 const membersData = [
   {
@@ -15,7 +15,7 @@ const membersData = [
     genre: ["Rock", "Jazz"],
     mobile: "0916513814",
     events: 32,
-    joinDate: "June 06, 2024, 5:00 pm",
+    joinDate: "June 06, 2024",
     status: "active",
     image: playmakersLogo,
   },

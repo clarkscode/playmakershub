@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Sidebar } from "../components/admin/SideBar";
-import { Header } from "../components/admin/Header";
 import PendingEvents from "../components/admin/PendingEvents";
 import PastEvents from "../components/admin/PastEvents";
 import PublishedEvents from "../components/admin/PublishedEvents";
@@ -8,6 +6,8 @@ import RejectedEvents from "../components/admin/RejectedEvents";
 import ApprovedEvents from "../components/admin/ApprovedEvents";
 import OngoingEvents from "../components/admin/OngoingEvents";
 import AcceptedEvents from "../components/admin/AcceptedEvents";
+import Sidebar from "../components/admin/Sidebar";
+import Header from "../components/admin/Header";
 
 const EventManagement = () => {
   const [activeTab, setActiveTab] = useState("recentlyAdded");

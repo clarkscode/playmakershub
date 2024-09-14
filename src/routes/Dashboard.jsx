@@ -1,12 +1,10 @@
 import { useState } from "react";
-
-import { Sidebar } from "../components/admin/SideBar";
 import { StatCard } from "../components/admin/StatCard";
-import { Header } from "../components/admin/Header";
 import { RecentAddedEvents } from "../components/admin/RecentAddedEvents";
 import { NewMembersTable } from "../components/admin/NewMembersTable";
 import { RecentUpdates } from "../components/admin/RecentUpdates";
-
+import Sidebar from "../components/admin/Sidebar";
+import Header from "../components/admin/Header";
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("recentlyAdded");
 

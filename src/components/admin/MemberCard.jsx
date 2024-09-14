@@ -7,9 +7,22 @@ const MemberCard = ({
   events,
   joinDate,
   image,
+  status,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md  w-80 mx-3">
+    <div className="bg-white rounded-lg shadow-md  w-80 mx-3 relative">
+      {/* Glowing pulsing circle */}
+      <div
+        className={`absolute top-4 right-4 w-4 h-4 rounded-full animate-pulse ${
+          status === "active"
+            ? "bg-[#40B267] "
+            : status === "inactive"
+            ? "bg-[#FF9100] "
+            : status === "warning"
+            ? "bg-[#FB4B4E] "
+            : ""
+        }`}
+      ></div>
       {/* Header Section with Image and Name */}
       <div className="pb-4 border-b border-[#FBEBF1] p-6">
         <img src={image} alt={name} className="w-14 h-14 rounded-full" />
@@ -65,6 +78,7 @@ const MemberCard = ({
           <div className="flex justify-between">
             <span>Email</span>
             <span
+              title={email}
               className="truncate text-gray-600"
               style={{ maxWidth: "150px", wordBreak: "break-word" }}
             >
