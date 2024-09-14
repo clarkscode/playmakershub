@@ -7,3 +7,89 @@
 :root {
   font-family: "Inter", sans-serif;
 }
+
+nav {
+  display: flex;
+  justify-content: flex-start; /* Ensures content is aligned to the left */
+  padding: 1rem;
+  position: relative; /* Make sure the nav is relative for absolute positioning */
+}
+
+/* Login button styling */
+.MloginBtn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 10px 25px;
+  border-radius: 10%;
+  font-size: 1.6rem;
+  text-decoration: none;
+
+  /* Positioning it to the top-left corner */
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+/* Main content */
+.main-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-top: 10rem;
+}
+
+.main-text-container {
+  text-align: left;
+}
+
+.main-text {
+  font-size: 5rem;
+}
+
+.sub-text {
+  font-size: 1.5rem;
+  color: #ffffffd9;
+  text-decoration: none;
+}
+
+.logo {
+  width: 30%;
+  margin-right: 5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .MloginBtn {
+    top: 10px;
+    left: 10px;
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .main-text-container {
+    text-align: center;
+  }
+
+  .logo {
+    margin: 0;
+    width: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-text {
+    font-size: 3rem;
+  }
+
+  .logo {
+    width: 70%;
+  }
+}
