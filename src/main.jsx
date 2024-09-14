@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import App from "./PlayMakersHome/App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFound from "./components/error/NotFound.jsx";
 import Login from "./authentication/Login.jsx";
+import LoginNonAdmin from "./authentication/LoginNonAdmin.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
 import EventManagement from "./routes/EventManagement.jsx";
 import MemberOrganization from "./routes/MemberOrganization.jsx";
@@ -39,6 +40,11 @@ const Main = () => {
     {
       path: `/`,
       element: <App />,
+      errorElement: <NotFound />,
+    },
+    {
+      path: `/Login`,
+      element: <LoginNonAdmin />,
       errorElement: <NotFound />,
     },
     {
