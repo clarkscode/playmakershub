@@ -16,14 +16,17 @@ const App = () => {
 
   return (
     <div id="blur" className={popupVisible ? 'active' : ''}>
-      <header>
-        <nav>
-          {/* Login Button placed inside nav and styled for proper positioning */}
-          <a href="" className="MloginBtn" onClick={handleLoginClick}>
-            Login
-          </a>
-        </nav>
-      </header>
+      <header className="flex items-center justify-between p-4 shadow-md">
+    <h1 className="text-xl font-bold text-[#FFFFFF]">Landing</h1>
+    <div className="flex items-center space-x-4">
+      <button
+        onClick={handleLoginClick}
+        className="px-4 py-2 bg-[#FFFFFF] text-black rounded hover:bg-[#9e9c9d]"
+      >
+        Login
+      </button>
+    </div>
+  </header>
       <main>
         <div className="main-content">
           <img src="playmakerslogo.png" alt="Playmakers Logo" className="logo" />

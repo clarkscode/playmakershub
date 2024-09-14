@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NotFound from "./components/error/NotFound.jsx";
 import Login from "./authentication/Login.jsx";
 import LoginNonAdmin from "./authentication/LoginNonAdmin.jsx";
+import Homepage from "./PlayMakersHome/Homepage.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
 import EventManagement from "./routes/EventManagement.jsx";
 import MemberOrganization from "./routes/MemberOrganization.jsx";
@@ -44,9 +45,20 @@ const Main = () => {
     },
     {
       path: `/Login`,
-      element: <LoginNonAdmin />,
+      element: isAuthenticated ? (<Homepage /> ) : (
+        <LoginNonAdmin onLoginSuccess={handleLoginSuccess} />
+      ),
       errorElement: <NotFound />,
     },
+
+    {
+      path: `/homepage`,
+      element: isAuthenticated ? (<Homepage /> ) : (
+        <LoginNonAdmin onLoginSuccess={handleLoginSuccess} />
+      ),
+      errorElement: <NotFound />,
+    },
+
     {
       path: `/dashboard`,
       element: isAuthenticated ? (
