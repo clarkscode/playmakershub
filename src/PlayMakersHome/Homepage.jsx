@@ -10,17 +10,23 @@ const Homepage = () => {
     window.location.reload();
   };
 
-  return (<header className="flex items-center justify-between p-4 shadow-md">
-    <h1 className="text-xl font-bold text-[#FFFFFF]">Homepage</h1>
-    <div className="flex items-center space-x-4">
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 bg-[#FFFFFF] text-black rounded hover:bg-[#9e9c9d]"
-      >
-        Logout
-      </button>
-    </div>
-  </header>
+  return (
+  <div className='bg-Radial bg-[#000000] h-screen'>
+        <header className="flex items-center justify-between p-4 shadow-md">
+          <h1 className="text-xl font-bold text-[#FFFFFF]">Homepage</h1>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={handleLogout}
+              className="font-poppins px-6 py-2 bg-[#992d5e] text-[#ffffff] text-md font-bold hover:bg-[#a83c70] rounded-full"
+            >
+              Logout
+            </button>
+          </div>
+        </header>
+        <main className="text-[#ffffff]">
+          Content
+        </main>
+  </div>
   )
 }
 

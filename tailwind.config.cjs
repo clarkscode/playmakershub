@@ -7,6 +7,7 @@ module.exports = {
     
       fontFamily: {
         poppins: ["Poppins", "sans-serif"], // default font
+        lexend: ['Lexend', 'sans-serif'],
       },
     },
     screens: {

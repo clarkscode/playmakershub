@@ -14,35 +14,39 @@ const App = () => {
   };
 
   return (
-    <div id="blur" className={popupVisible ? "active" : ""}>
+    <div className="bg-Radial h-screen bg-[#000000]">
       <header className="flex items-center justify-between p-4 shadow-md">
-        <h1 className="text-xl font-bold text-[#FFFFFF]">Landing</h1>
+        <h1 className="text-xl font-poppins text-[#fafafa]">NAVIGATION BAR</h1>
         <div className="flex items-center space-x-4">
           <button
             onClick={handleLoginClick}
-            className="px-4 py-2 bg-[#FFFFFF] text-black rounded hover:bg-[#9e9c9d]"
+            className="font-poppins px-6 py-2 bg-[#992d5e] text-[#ffffff] text-md font-bold hover:bg-[#a83c70] rounded-full"
           >
             Login
           </button>
         </div>
       </header>
-      <main>
-        <div className="main-content">
-          <img
-            src="playmakerslogo.png"
-            alt="Playmakers Logo"
-            className="logo"
-          />
-          <div className="main-text-container">
-            <h1 className="main-text">
-              Exploring Music
-              <br />
-              Within You
-            </h1>
-            <a href="#" className="sub-text">
-              About us -&gt;
-            </a>
+      <main className="flex justify-center items-center">
+        <div className="Content flex flex-col md:flex-row md:justify-between px-4 md:px-10">
+        <div className="main-content -space-x-10">
+              <img
+                src="playmakerslogo.png"
+                alt="Playmakers Logo"
+                className="logo object-cover"
+              />
+              <div className="main-text-container">
+                    <div className="pr-20">
+                        <h1 className="main-text bottom-5 font-lexend font-semibold text-[#fcfafa]">
+                          Exploring Music 
+                          <br/>
+                          Within You
+                        </h1> 
+                        <p className="sub-text text-[#7e7e7e] font-poppins mt-4 text-lg">
+                            About us ➡
+                      </p>
+                </div>
           </div>
+        </div>
         </div>
       </main>
     </div>
