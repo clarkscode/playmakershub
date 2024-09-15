@@ -44,11 +44,11 @@ const LoginNonAdmin = ({ onLoginSuccess }) => {
                 alignItems: 'center',
                 height: '100vh',
                 background: 'radial-gradient(circle at 25% center, #5C1B33, transparent 85%), radial-gradient(circle at 75% center, #2618A7, transparent 80%)',
-                backgroundColor: '#ad7c7c',
-                margin: 0,
+                backgroundColor: '#000000',
+                marginTop: 0,
             }}
         >
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-150px', alignItems: 'center', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-50px', alignItems: 'center', paddingBottom: '2rem'}}>
                 <img
                     src="playmakerslogo.png"
                     alt="Playmakers Logo"
