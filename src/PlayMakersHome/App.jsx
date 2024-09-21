@@ -15,8 +15,37 @@ const App = () => {
 
   return (
     <div className="bg-Radial h-screen bg-[#000000]">
-      <header className="flex items-center justify-between p-4 shadow-md">
-        <h1 className="text-xl font-poppins text-[#fafafa]">NAVIGATION BAR</h1>
+      <header className="flex items-center justify-between p-4 shadow-md py-1">
+      <nav className="flex justify-center space-x-20 w-full">
+          <button
+            onClick={() => navigate("/events")}
+            className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]">
+            Events
+          </button>
+
+          <button
+            onClick={() => navigate("/events")}
+            className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]">
+            Home
+          </button>
+
+          <button
+            onClick={() => navigate("/playmakers-hub")}
+            className="text-[#FFFFFF] text-4xl font-medium hover:text-[#a83c70]">
+            Playmakers Hub
+          </button>
+          <button
+            onClick={() => navigate("")}
+            className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]">
+            Booking
+          </button>
+          <button
+            onClick={() => navigate("")}
+            className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]">
+            Join us
+          </button>
+        </nav>
+
         <div className="flex items-center space-x-4">
           <button
             onClick={handleLoginClick}
