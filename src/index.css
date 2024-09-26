@@ -4,6 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add this custom CSS */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2f2a35; /* Dark track background */
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #83384E; /* Red-ish color */
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aa6262; /* Lighter red on hover */
+}
+
 :root {
   font-family: "Inter", sans-serif;
 }
