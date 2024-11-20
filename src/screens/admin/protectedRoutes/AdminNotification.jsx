@@ -1,6 +1,6 @@
-import Sidebar from "./Sidebar";
-import Header from "./Header";
-const Notification = () => {
+import Sidebar from "../../../components/admin/Sidebar";
+import Header from "../../../components/admin/Header";
+const AdminNotification = () => {
   return (
     <div className="min-h-screen flex bg-[#FBEBF1]">
       <Sidebar />
@@ -11,4 +11,4 @@ const Notification = () => {
   );
 };
 
-export default Notification;
+export default AdminNotification;

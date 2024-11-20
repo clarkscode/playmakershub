@@ -1,13 +1,15 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// progress bar
 import LinearProgress from "@mui/material/LinearProgress";
+import { useState } from "react";
+import { supabase, updateEventStatus } from "../../database/supabase";
+import sendEmail from "../../database/sendEmail";
+import { formatDateTime } from "./Reusable/FormatDate";
 
 const EventCard = ({
+  eventId,
   eventTitle,
   organizer,
   email,
@@ -22,17 +24,173 @@ const EventCard = ({
   participants,
   maxParticipants,
 }) => {
-  // Determine ang event status para sa specific styling and behavior
+  const [participationFilter, setParticipationFilter] =
+    useState("Open to anyone");
+
+  // Determine the event status for specific styling and behavior
   const isRejected = status === "Rejected";
   const isAccepted = status === "Accepted";
   const isPending = status === "Pending";
   const isOngoing = status === "Ongoing";
 
-  // e calculate ang percentage  sa participants
+  // Calculate the percentage of participants
   const participationPercentage = Math.min(
     (participants / maxParticipants) * 100,
     100
   );
+
+  // Dropdown options for participation filter
+  const participationOptions = [
+    { label: "Open for Anyone", color: "bg-green-500", value: "green" },
+    { label: "Inactive Members ", color: "bg-orange-500", value: "orange" },
+    { label: "Probationary Members", color: "bg-red-500", value: "red" },
+  ];
+
+  // Format event start and end
+  const { formattedDate: startDate, formattedTime: startTime } = formatDateTime(
+    eventStart.date,
+    eventStart.time
+  );
+
+  const { formattedDate: endDate, formattedTime: endTime } = formatDateTime(
+    eventEnd.date,
+    eventEnd.time
+  );
+
+  // Function to handle accepting an event
+  const handleAcceptEvent = async (eventId, organizerEmail, eventTitle) => {
+    try {
+      // Update the event status to 'Accepted'
+      const { error } = await supabase
+        .from("events")
+        .update({ event_status: "Accepted" })
+        .eq("event_id", eventId);
+
+      if (error) throw error;
+
+      const { error: filterError } = await supabase
+        .from("participation")
+        .update({
+          participant_filter: "green",
+          // Storing "green" but UI shows "Open to anyone"
+        })
+        .eq("event_id", eventId);
+
+      if (filterError) throw filterError;
+
+      // Send email notification to the organizer
+      await sendEmail(
+        organizerEmail,
+        `Your event "${eventTitle}" has been accepted!`,
+        `<p>Dear Organizer,</p>
+         <p>Your event "<strong>${eventTitle}</strong>" has been accepted by Playmakers Admin.</p>
+         <p>For more details, visit your <strong>Previous Booking</strong> located at the top right corner of the booking form.</p>
+         <p>Thank you for reaching out to Playmakers - USTP!</p>
+         <p>Best Regards, 
+         <br/>The Playmakers Family</p>`
+      );
+
+      alert("Event accepted successfully and the organizer has been notified!");
+    } catch (error) {
+      console.error("Error accepting event:", error);
+      alert("Failed to accept the event.");
+    }
+  };
+
+  // Function to handle rejecting an event
+  const handleRejectEvent = async (eventId, organizerEmail, eventTitle) => {
+    try {
+      // Update the event status to 'Rejected'
+      const { error } = await supabase
+        .from("events")
+        .update({ event_status: "Rejected" })
+        .eq("event_id", eventId);
+
+      if (error) throw error;
+
+      // Send email notification to the organizer
+      await sendEmail(
+        organizerEmail,
+        `Your event "${eventTitle}" has been rejected`,
+        `<p>Dear Organizer,</p><p>Unfortunately, your event "<strong>${eventTitle}</strong>" has been rejected by Playmakers Admin. Please contact us for more details.</p><p>Best regards,<br/>Playmakers Admin</p>`
+      );
+
+      alert("Event rejected successfully and the organizer has been notified!");
+    } catch (error) {
+      console.error("Error rejecting event:", error);
+      alert("Failed to reject the event.");
+    }
+  };
+
+  // Function to notify members based on filter
+  const notifyMembersBasedOnFilter = async (eventId, eventTitle, filter) => {
+    let statusesToNotify = [];
+
+    // Determine which statuses to notify based on the filter
+    if (filter === "green") {
+      statusesToNotify = ["Green", "Orange", "Red"]; // Notify all members
+    } else if (filter === "orange") {
+      statusesToNotify = ["Orange", "Red"]; // Notify Orange and Red members
+    } else if (filter === "red") {
+      statusesToNotify = ["Red"]; // Notify only Red members
+    }
+
+    try {
+      // Fetch members based on participation status
+      const { data: members, error } = await supabase
+        .from("users")
+        .select("*")
+        .in("participation_status", statusesToNotify);
+
+      if (error) throw error;
+
+      // Notify members via email and Playmakers Hub (web)
+      for (const member of members) {
+        // Send email notification
+        await sendEmail(
+          member.email,
+          `You are invited to participate in "${eventTitle}"`,
+          `<p>Hello ${member.first_name},</p>
+         <p>You are invited to participate in the event "<strong>${eventTitle}</strong>"!</p>
+         <p>For more details, visit Playmakers Hub.</p>
+         <p>Thank you for reaching out to Playmakers - USTP!</p>
+         <p>Best regards,<br/>The Playmakers Family</p>`
+        );
+
+        // Send in-app (web) notification
+        await supabase.from("notifications").insert({
+          event_id: eventId,
+          user_id: member.id,
+          notification_type: "web",
+          content: `You are invited to participate in the event "${eventTitle}". Visit Playmakers Hub for more details.`,
+        });
+      }
+    } catch (error) {
+      console.error("Error notifying members: ", error);
+      alert("Failed to notify members");
+    }
+  };
+
+  // Function to handle creating the event and notifying based on the filter
+  const handleCreateEvent = async () => {
+    try {
+      // Update event status to "Ongoing"
+      await updateEventStatus(eventId, "Ongoing");
+
+      // Notify members based on the participation filter
+      await notifyMembersBasedOnFilter(
+        eventId,
+        eventTitle,
+        participationFilter
+      );
+      console.log(participationFilter);
+      console.log("member email", email);
+      alert("Event Successfully created and members notified!");
+    } catch (error) {
+      console.error("Error updating event status:", error);
+      alert("Failed to create event");
+    }
+  };
 
   return (
     <div
@@ -52,13 +210,14 @@ const EventCard = ({
       >
         {/* Theme Tag */}
         {!genre && genre.length === 0 && theme && (
-          <div className="mb-2">
+          <div className="mb-2 text-white text-sm font-semibold">
+            Theme:
             <span
               className={`${
                 isRejected
                   ? "bg-gray-200 text-gray-700"
                   : "bg-[#FBEBF1] text-[#5C1B33]"
-              } px-4 py-1 text-sm font-semibold rounded-full`}
+              } px-4 py-1 text-sm font-semibold rounded-full ms-2`}
             >
               {theme}
             </span>
@@ -96,21 +255,19 @@ const EventCard = ({
               </span>
             </p>
           </div>
-
+          {/* genre */}
           {genre && genre.length > 0 && (
-            <div className="flex space-x-2 mt-4">
-              {genre.map((genreItem, index) => (
-                <span
-                  key={index}
-                  className={`${
-                    isRejected
-                      ? "bg-gray-300 text-gray-600"
-                      : "bg-pink-500 text-white"
-                  } px-4 py-1 text-sm font-semibold`}
-                >
-                  {genreItem}
-                </span>
-              ))}
+            <div className="flex space-x-2 mt-4 text-black-600 text-sm font-semibold">
+              Genre:
+              <span
+                className={`${
+                  isRejected
+                    ? "bg-gray-300 text-gray-600"
+                    : "bg-pink-500 text-white"
+                } px-4 py-1 text-sm font-semibold ms-2`}
+              >
+                {genre}
+              </span>
             </div>
           )}
         </div>
@@ -119,18 +276,37 @@ const EventCard = ({
           <div>
             <p className="font-semibold">Event Start</p>
             <p className="text-gray-700">
-              {eventStart.date} <br />
-              {eventStart.time}
+              {startDate} <br />
+              {startTime}
             </p>
           </div>
           <div>
             <p className="font-semibold">Event End</p>
             <p className="text-gray-700">
-              {eventEnd.date} <br />
-              {eventEnd.time}
+              {endDate} <br />
+              {endTime}
             </p>
           </div>
         </div>
+
+        {/* Dropdown for Participation Filter */}
+        {isAccepted && (
+          <div className="mb-4">
+            <select
+              value={participationFilter}
+              onChange={(e) => {
+                setParticipationFilter(e.target.value);
+              }}
+              className="block w-full px-4 py-2 text-sm font-medium text-white bg-gray-700 rounded-md"
+            >
+              {participationOptions.map((option, index) => (
+                <option key={index} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Participation Bar */}
         {isOngoing && (
@@ -154,90 +330,45 @@ const EventCard = ({
           </div>
         )}
 
+        {/* Pending Status Actions (Accept or Reject) */}
         <div className="flex justify-between items-center gap-3">
-          {isAccepted ? (
-            <div className="w-full">
-              <button className="bg-[#5C1B33] text-white px-4 py-2 rounded-lg w-full">
-                Create Event
+          {isPending ? (
+            <div className="w-full flex gap-2">
+              <button
+                className="flex items-center justify-center text-white bg-green-600 px-4 py-2 rounded-lg w-full"
+                onClick={() => {
+                  handleAcceptEvent(eventId, email, eventTitle);
+                }}
+              >
+                <FaCheckCircle className="mr-2" /> Accept
+              </button>
+              <button
+                className="flex items-center justify-center text-white bg-red-600 px-4 py-2 rounded-lg w-full"
+                onClick={() => {
+                  handleRejectEvent(eventId, email, eventTitle);
+                }}
+              >
+                <FaTimesCircle className="mr-2" /> Reject
               </button>
             </div>
           ) : (
-            <>
-              {isPending ? (
-                <>
-                  <div className="w-full">
-                    <button className="bg-[#6C6A76]/50 text-white px-4 py-2 rounded-lg w-full cursor-not-allowed">
-                      Create Event
-                    </button>
-                  </div>
-                  <div className="w-full">
-                    <Menu
-                      as="div"
-                      className="relative inline-block text-left w-full"
-                    >
-                      <MenuButton className="flex items-center justify-center text-white bg-[#D94C2A]/50 px-4 py-2 rounded-lg w-full">
-                        {status}
-                        <ChevronDownIcon
-                          className="ml-2 h-5 w-5"
-                          aria-hidden="true"
-                        />
-                      </MenuButton>
-                      <MenuItems className="absolute right-0 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="py-1">
-                          <MenuItem>
-                            {({ active }) => (
-                              <button
-                                className={`${
-                                  active
-                                    ? "bg-green-100 text-green-900"
-                                    : "text-gray-900"
-                                } group flex items-center px-4 py-2 text-sm w-full`}
-                              >
-                                <FaCheckCircle className="mr-2 text-green-600" />
-                                Accept
-                              </button>
-                            )}
-                          </MenuItem>
-                          <MenuItem>
-                            {({ active }) => (
-                              <button
-                                className={`${
-                                  active
-                                    ? "bg-red-100 text-red-900"
-                                    : "text-gray-900"
-                                } group flex items-center px-4 py-2 text-sm w-full`}
-                              >
-                                <FaTimesCircle className="mr-2 text-red-600" />
-                                Reject
-                              </button>
-                            )}
-                          </MenuItem>
-                        </div>
-                      </MenuItems>
-                    </Menu>
-                  </div>
-                </>
-              ) : isOngoing ? (
-                <div className="w-full">
-                  <button
-                    className={`${
-                      participationPercentage === 100
-                        ? "bg-[#5C1B33] text-white"
-                        : "bg-gray-400 text-white cursor-not-allowed"
-                    } px-4 py-2 rounded-lg w-full`}
-                    disabled={participationPercentage < 100}
-                  >
-                    Approve
-                  </button>
-                </div>
-              ) : (
-                <div className="w-full">
-                  <button className="bg-gray-400 text-white px-4 py-2 rounded-lg w-full cursor-not-allowed">
-                    Rejected
-                  </button>
-                </div>
-              )}
-            </>
+            <div className="w-full">
+              <button
+                className={`${
+                  isRejected || participants < maxParticipants
+                    ? "bg-gray-400 text-white cursor-not-allowed"
+                    : "bg-[#5C1B33] text-white"
+                } px-4 py-2 rounded-lg w-full`}
+                disabled={isRejected || participants < maxParticipants}
+                onClick={isAccepted ? handleCreateEvent : undefined}
+              >
+                {isRejected
+                  ? "Rejected"
+                  : isOngoing
+                  ? "Publish Event"
+                  : "Create Event"}
+              </button>
+            </div>
           )}
         </div>
       </div>

@@ -1,7 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { playmakersLogo } from "../../assets";
-import { useNavigate } from "react-router-dom";
-
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import EventIcon from "@mui/icons-material/Event";
 import GroupIcon from "@mui/icons-material/Group";
@@ -9,18 +7,20 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ChatIcon from "@mui/icons-material/Chat";
+import { supabase } from "../../database/supabase";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
   const activeStyle = "bg-[#5C1B33] text-white rounded-lg";
   const inactiveStyle = "text-gray-500";
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
+    supabase.auth.signOut();
+    localStorage.removeItem("adminAuthToken");
+    sessionStorage.removeItem("adminAuthToken");
     navigate("/adminonly");
-    window.location.reload();
   };
 
   return (
@@ -37,14 +37,16 @@ const Sidebar = () => {
       <ul className="space-y-4 p-4">
         <li>
           <Link
-            to="/dashboard"
+            to="/admin/dashboard"
             className={`flex items-center py-3 px-4 text-md font-medium ${
-              location.pathname === "/dashboard" ? activeStyle : inactiveStyle
+              location.pathname === "/admin/dashboard"
+                ? activeStyle
+                : inactiveStyle
             }`}
           >
             <WidgetsIcon
               className={`mr-2 ${
-                location.pathname === "/dashboard"
+                location.pathname === "/admin/dashboard"
                   ? "text-white"
                   : "text-gray-500"
               }`}
@@ -54,16 +56,16 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="/events-management"
+            to="/admin/events-management"
             className={`flex items-center py-3 px-4 text-md font-medium ${
-              location.pathname === "/events-management"
+              location.pathname === "/admin/events-management"
                 ? activeStyle
                 : inactiveStyle
             }`}
           >
             <EventIcon
               className={`mr-2 ${
-                location.pathname === "/events-management"
+                location.pathname === "/admin/events-management"
                   ? "text-white"
                   : "text-gray-500"
               }`}
@@ -73,16 +75,16 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="/member-organization"
+            to="/admin/member-organization"
             className={`flex items-center py-3 px-4 text-md font-medium ${
-              location.pathname === "/member-organization"
+              location.pathname === "/admin/member-organization"
                 ? activeStyle
                 : inactiveStyle
             }`}
           >
             <GroupIcon
               className={`mr-2 ${
-                location.pathname === "/member-organization"
+                location.pathname === "/admin/member-organization"
                   ? "text-white"
                   : "text-gray-500"
               }`}
@@ -92,16 +94,16 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="/event-statistics"
+            to="/admin/event-statistics"
             className={`flex items-center py-3 px-4 text-md font-medium ${
-              location.pathname === "/event-statistics"
+              location.pathname === "/admin/event-statistics"
                 ? activeStyle
                 : inactiveStyle
             }`}
           >
             <AssessmentIcon
               className={`mr-2 ${
-                location.pathname === "/event-statistics"
+                location.pathname === "/admin/event-statistics"
                   ? "text-white"
                   : "text-gray-500"
               }`}
@@ -111,16 +113,16 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="/notification"
+            to="/admin/notification"
             className={`flex items-center py-3 px-4 text-md font-medium ${
-              location.pathname === "/notification"
+              location.pathname === "/admin/notification"
                 ? activeStyle
                 : inactiveStyle
             }`}
           >
             <NotificationsIcon
               className={`mr-2 ${
-                location.pathname === "/notification"
+                location.pathname === "/admin/notification"
                   ? "text-white"
                   : "text-gray-500"
               }`}
@@ -130,14 +132,33 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="/profile"
+            to="/admin/chat"
             className={`flex items-center py-3 px-4 text-md font-medium ${
-              location.pathname === "/profile" ? activeStyle : inactiveStyle
+              location.pathname === "/admin/chat" ? activeStyle : inactiveStyle
+            }`}
+          >
+            <ChatIcon
+              className={`mr-2 ${
+                location.pathname === "/admin/chat"
+                  ? "text-white"
+                  : "text-gray-500"
+              }`}
+            />
+            Chat
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/admin/profile"
+            className={`flex items-center py-3 px-4 text-md font-medium ${
+              location.pathname === "/admin/profile"
+                ? activeStyle
+                : inactiveStyle
             }`}
           >
             <PersonPinIcon
               className={`mr-2 ${
-                location.pathname === "/profile"
+                location.pathname === "/admin/profile"
                   ? "text-white"
                   : "text-gray-500"
               }`}

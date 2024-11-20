@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { StatCard } from "../components/admin/StatCard";
-import { RecentAddedEvents } from "../components/admin/RecentAddedEvents";
-import { NewMembersTable } from "../components/admin/NewMembersTable";
-import { RecentUpdates } from "../components/admin/RecentUpdates";
-import Sidebar from "../components/admin/Sidebar";
-import Header from "../components/admin/Header";
+import { StatCard } from "../../../components/admin/StatCard";
+import { RecentAddedEvents } from "../../../components/admin/RecentAddedEvents";
+import { NewMembersTable } from "../../../components/admin/NewMembersTable";
+import { RecentUpdates } from "../../../components/admin/RecentUpdates";
+import Sidebar from "../../../components/admin/Sidebar";
+import Header from "../../../components/admin/Header";
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("recentlyAdded");
 
@@ -23,7 +24,7 @@ const Dashboard = () => {
         <Header title="Dashboard" />
 
         {/* Dashboard Content */}
-        <div className="p-4">
+        <div className="p-4 animate__animated animate__fadeIn">
           {/* Stats Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <StatCard label="No. of total events" value="135" />
@@ -38,7 +39,7 @@ const Dashboard = () => {
             </h2>
             <div className="flex mt-4 bg-white rounded-lg p-2 stroke-[#A7A9C0]">
               <button
-                className={`p-2 text-[#4B4B4C] font-bold px-5 text-sm ${
+                className={`p-2 text-[#4B4B4C] font-bold px-5 text-sm  ${
                   activeTab === "recentlyAdded"
                     ? "border-b-2 border-[#5C1B33]"
                     : ""

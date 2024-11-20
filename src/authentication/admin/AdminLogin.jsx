@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  supabase,
-} from "../database/supabase";
-import { playmakersLogo } from "../assets";
+import { fetchUserType, supabase } from "../../database/supabase";
+import { playmakersLogo } from "../../assets";
 
-const Login = ({ onLoginSuccess }) => {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+
+  // Redirect if the admin is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem("adminAuthToken");
+    if (token) {
+      navigate("/admin/dashboard");
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +25,7 @@ const Login = ({ onLoginSuccess }) => {
     setError("");
 
     const {
-      data: { user },
+      data: { session, user },
       error,
     } = await supabase.auth.signInWithPassword({
       email,
@@ -31,18 +38,26 @@ const Login = ({ onLoginSuccess }) => {
       return;
     }
 
-    /* Check the user metadata to verify if the role is admin */
-    
-    if (user) {
-      const role = user.user_metadata?.role;
+    // Check if the use is logged-in and the user is an admin
+    if (user && session) {
+      try {
+        // Fetch user_type from the database
+        const userType = await fetchUserType(user.id);
 
-      if (role !== "admin") {
-        setError("Access denied: You do not have admin privileges.");
-        return;
+        // Check if user_type is admin or superadmin
+        if (userType !== "admin" && userType !== "superadmin") {
+          setError("Access denied: You do not have admin privileges.");
+          return;
+        }
+
+        // Save the token based on rememberMe choice
+        const tokenStorage = rememberMe ? localStorage : sessionStorage;
+        tokenStorage.setItem("adminAuthToken", session.access_token);
+
+        navigate("/admin/dashboard");
+      } catch (fetchError) {
+        console.error("Error verifying user type:", fetchError);
       }
-
-      onLoginSuccess();
-      navigate("/dashboard");
     }
   };
 
@@ -50,7 +65,6 @@ const Login = ({ onLoginSuccess }) => {
     <div className="flex items-center justify-center min-h-screen bg-[#5C1B33]">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-md flex">
         {/* Left Side Login Form */}
-        
         <div className="w-1/2 p-8">
           <h2 className="text-2xl font-bold text-[#5C1B33]">Administrator</h2>
           <p className="mt-2 text-red-400/60 text-xs font-medium">
@@ -106,6 +120,8 @@ const Login = ({ onLoginSuccess }) => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
                   className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                 />
                 <label
@@ -161,4 +177,4 @@ const Login = ({ onLoginSuccess }) => {
   );
 };
 
-export default Login;
+export default AdminLogin;

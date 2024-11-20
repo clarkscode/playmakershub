@@ -1,11 +1,11 @@
 import { useState } from "react";
-import MemberCard from "../components/admin/MemberCard";
-import Modal from "../components/admin/Reusable/Modal";
-import MemberForm from "../components/admin/Reusable/MemberForm";
-import MemberDetailsModal from "../components/admin/MemberDetailsModal";
-import { playmakersLogo } from "../assets";
-import Sidebar from "../components/admin/Sidebar";
-import Header from "../components/admin/Header";
+import MemberCard from "../../../components/admin/MemberCard";
+import Modal from "../../../components/admin/Reusable/Modal";
+import MemberForm from "../../../components/admin/Reusable/MemberForm";
+import MemberDetailsModal from "../../../components/admin/MemberDetailsModal";
+import { playmakersLogo } from "../../../assets";
+import Sidebar from "../../../components/admin/Sidebar";
+import Header from "../../../components/admin/Header";
 
 const membersData = [
   {
@@ -137,7 +137,7 @@ const MemberOrganization = () => {
             className="bg-[#5C1B33] text-white px-6 py-2 rounded-lg"
             onClick={handleCreateAccount}
           >
-            Create Account
+            Create Member
           </button>
         </div>
 
@@ -155,11 +155,7 @@ const MemberOrganization = () => {
       </div>
 
       {/* Animal nga modal */}
-      <Modal
-        isOpen={isModalOpen}
-        title="Create New Account"
-        onClose={closeModal}
-      >
+      <Modal isOpen={isModalOpen} title="Add Member" onClose={closeModal}>
         <MemberForm
           newMember={newMember}
           setNewMember={setNewMember}

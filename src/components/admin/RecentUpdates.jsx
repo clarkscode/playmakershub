@@ -13,7 +13,7 @@ export const RecentUpdates = () => {
   ];
 
   return (
-    <table className="min-w-full bg-white">
+    <table className="min-w-full bg-white animate__animated animate__fadeIn">
       <thead>
         <tr className="bg-[#EFFBEF]">
           <th className="py-2  text-[#5C1B33] text-sm">Update Type</th>

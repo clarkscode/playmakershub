@@ -1,5 +1,3 @@
 import playmakersLogo from "./playmakerslogo.png";
-
-export {
-  playmakersLogo
-}
+import addEvent from "./addEvent.svg";
+export { playmakersLogo, addEvent };

@@ -6,16 +6,15 @@ const NotFound = () => {
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-sm text-center">
           <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-[180px] text-[#B3B3B3] flex justify-center gap-5">
-            4 0 4
-          </h1>
-          <div className="flex justify-center">
+            4{" "}
             <img
               src={playmakersLogo}
               alt="opensea logo"
-              width={150}
-              height={150}
-            />
-          </div>
+              width={160}
+              height={130}
+            />{" "}
+            4
+          </h1>
 
           <p className="mb-4 text-3xl tracking-tight font-bold text-white md:text-4xl dark:text-white">
             This page is lost.

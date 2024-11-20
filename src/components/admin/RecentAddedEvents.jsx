@@ -17,7 +17,7 @@ export const RecentAddedEvents = () => {
   ];
 
   return (
-    <table className="min-w-full bg-white rounded-lg">
+    <table className="min-w-full bg-white rounded-lg animate__animated animate__fadeIn">
       <thead className="bg-[#EFFBEF]">
         <tr>
           <th className="py-2 text-[#5C1B33] text-sm">Event Name</th>
