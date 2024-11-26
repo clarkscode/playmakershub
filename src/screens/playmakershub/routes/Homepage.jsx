@@ -322,44 +322,62 @@ const Homepage = () => {
 
   return (
     <div className="bg-Radial h-screen bg-[#000000]">
-      <ToastContainer />
-      <header className="flex items-center justify-between p-4 shadow-md py-1">
-        <nav className="flex justify-center space-x-20 w-full">
-          <button
-            onClick={() => navigate("/events/past")}
-            className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]"
-          >
-            Events
-          </button>
+      <div>
+        <ToastContainer />
+        <header className="flex items-center justify-between p-4 shadow-md py-1">
+          {/* Left Space to Center Playmakers Hub */}
+          <div className="flex-1"></div>
 
-          <button
-            onClick={() => navigate("/")}
-            className="text-[#FFFFFF] text-4xl font-medium hover:text-[#a83c70]"
-          >
-            Playmakers Hub
-          </button>
+          {/* Navigation */}
+          <nav className="flex justify-center space-x-20">
+            <button
+              onClick={() => navigate("/about-us")}
+              className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]"
+            >
+              About
+            </button>
 
-          <button
-            onClick={togglePopup}
-            className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]"
-          >
-            Booking
-          </button>
+            <button
+              onClick={() => navigate("/events/past")}
+              className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]"
+            >
+              Events
+            </button>
 
-          <button className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]">
-            Join us
-          </button>
-        </nav>
+            <button
+              onClick={() => navigate("/")}
+              className="text-[#FFFFFF] text-4xl font-medium"
+            >
+              Playmakers Hub
+            </button>
 
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => navigate("/member/login")}
-            className="font-poppins px-6 py-2 bg-[#992d5e] text-[#ffffff] text-md font-bold hover:bg-[#a83c70] rounded-full"
-          >
-            Login
-          </button>
-        </div>
-      </header>
+            <button
+              onClick={togglePopup}
+              className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]"
+            >
+              Booking
+            </button>
+
+            <button
+              onClick={() => navigate("/join")}
+              className="text-[#FFFFFF] text-2xl font-medium hover:text-[#a83c70]"
+            >
+              Join us
+            </button>
+          </nav>
+
+          {/* Login Button */}
+          <div className="flex-1 flex justify-end">
+            <button
+              onClick={() => navigate("/member/login")}
+              className="font-poppins px-6 py-2 bg-[#992d5e] text-[#ffffff] text-md font-bold hover:bg-[#a83c70] rounded-full"
+            >
+              Login
+            </button>
+          </div>
+        </header>
+      </div>
+
 
       <main className="flex justify-center items-center">
         <div className="Content flex flex-col md:flex-row md:justify-between px-4 md:px-10">
@@ -376,7 +394,10 @@ const Homepage = () => {
                   <br />
                   Within You
                 </h1>
-                <p className="sub-text text-[#7e7e7e] font-poppins mt-4 text-lg">
+                <p
+                  onClick={() => navigate("/about-us")}
+                  className="sub-text text-[#7e7e7e] font-poppins mt-4 text-lg cursor-pointer hover:text-[#fcfafa] transition-colors"
+                >
                   About us ➡
                 </p>
               </div>
